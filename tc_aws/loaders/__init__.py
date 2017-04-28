@@ -4,11 +4,12 @@
 # Use of this source code is governed by the MIT license that can be
 # found in the LICENSE file.
 
-__all__ = ['_get_bucket_and_key', '_get_bucket', '_get_key', '_validate_bucket', '_use_http_loader']
+__all__ = ['_get_buckets_and_key', '_get_bucket', '_get_key', '_validate_bucket', '_use_http_loader']
 
+from thumbor.utils import logger
 import urllib2
 
-def _get_bucket_and_key(context, url):
+def _get_buckets_and_key(context, url):
     """
     Returns bucket and key from url
     :param Context context: Thumbor's context
@@ -17,15 +18,19 @@ def _get_bucket_and_key(context, url):
     :rtype: tuple
     """
     url = urllib2.unquote(url)
+    buckets = []
+    if context.config.get('TC_AWS_LOADER_BUCKETS'):
+        buckets = context.config.get('TC_AWS_LOADER_BUCKETS')
+    else:
+        buckets.append(context.config.get('TC_AWS_LOADER_BUCKET'))
 
-    bucket = context.config.get('TC_AWS_LOADER_BUCKET')
-    if not bucket:
-        bucket = _get_bucket(url)
+    if len(buckets) == 0:
+        buckets = _get_bucket(url)
         url = '/'.join(url.lstrip('/').split('/')[1:])
 
     key = _get_key(url, context)
 
-    return bucket, key
+    return buckets, key
 
 def _get_bucket(url):
     """

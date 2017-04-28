@@ -48,13 +48,15 @@ def load(context, url, callback):
 class HandleDataFunc(object):
 
     def __init__(self, key, callback=None,
-                 bucket_loader=None, context=None):
+                 bucket_loader=None, context=None, buckets=None):
         self.key = key
         self.bucket_loader = bucket_loader
+        self.buckets = buckets
         self.callback = callback
         self.context = context
         self.limit_max_retries = context.config.get('TC_AWS_MAX_RETRIES')
         self.max_retries_counter = 0
+        self.current_bucket = 1
 
     @classmethod
     def as_func(cls, *init_args, **init_kwargs):
@@ -97,9 +99,20 @@ class HandleDataFunc(object):
             status_code = response_metadata.get('HTTPStatusCode')
 
             if status_code == 404:
-                result.error = LoaderResult.ERROR_NOT_FOUND
-                self.callback(result)
-                return
+                if self.current_bucket < len(self.buckets):
+                    logger.debug("Checking fort bucket: {0}".format(self.buckets[self.current_bucket]))
+                    buck = self.buckets[self.current_bucket]
+                    self.bucket_loader = Bucket(buck, self.context.config.get('TC_AWS_REGION'),
+                                                self.context.config.get('TC_AWS_ENDPOINT'))
+                    self.bucket_loader.get(self.key,
+                                           callback=self.dispatch)
+                    self.current_bucket = self.current_bucket + 1
+                    return
+
+                else:
+                    result.error = LoaderResult.ERROR_NOT_FOUND
+                    self.callback(result)
+                    return
 
             if self.max_retries_counter < self.limit_max_retries:
                 self.__increment_retry_counter()
