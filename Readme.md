@@ -70,15 +70,13 @@ TC_AWS_STORAGE_ROOT_PATH='' # S3 path prefix for Storage bucket
 # S3 bucket for Loader. If given, source urls are interpreted as keys
 # within this bucket. If not given, source urls are expected to contain
 # the bucket name, such as 's3-bucket/keypath'.
-TC_AWS_LOADER_BUCKET=''
+# if TC_AWS_LOADER_BUCKETS is provided, TC_AWS_LOADER_BUCKET will be not used.
+TC_AWS_LOADER_BUCKETS=['bucket1', 'bucket2']
+TC_AWS_LOADER_BUCKET='bucket1'
 
 # S3 path prefix for Loader bucket. If given, this is prefixed to
 # all S3 keys.
-# If TC_AWS_LOADER_BUCKETS is provided, TC_AWS_LOADER_BUCKET will be not used.
-TC_AWS_LOADER_BUCKET='bucket1'
-TC_AWS_LOADER_BUCKETS=['bucket1', 'bucket2']
-
-TC_AWS_LOADER_ROOT_PATH='/storage'
+TC_AWS_LOADER_ROOT_PATH=''
 
 # Enable HTTP Loader as well?
 # This would allow you to load watermarks in over your images dynamically through a URI

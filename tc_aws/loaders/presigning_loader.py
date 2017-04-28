@@ -35,7 +35,7 @@ def load(context, url, callback):
     if _use_http_loader(context, url):
         http_loader.load_sync(context, url, callback, normalize_url_func=http_loader._normalize_url)
     else:
-        bucket, key = _get_buckets_and_key(context, url)
+        bucket, key = _get_bucket_and_key(context, url)
 
         if _validate_bucket(context, bucket):
             def on_url_generated(generated_url):
