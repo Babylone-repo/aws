@@ -29,7 +29,7 @@ class S3LoaderVows(Vows.Context):
 
         def should_detect_bucket_and_key(self, topic):
             path = 'some-bucket/some/image/path.jpg'
-            bucket, key = _get_bucket_and_key(topic, path)
+            bucket, key = _get_buckets_and_key(topic, path)
             expect(bucket).to_equal('some-bucket')
             expect(key).to_equal('some/image/path.jpg')
 

@@ -26,24 +26,24 @@ def load(context, url, callback):
         http_loader.load_sync(context, url, callback, normalize_url_func=http_loader._normalize_url)
         return
 
-    bucket, key = _get_bucket_and_key(context, url)
+    buckets, key = _get_buckets_and_key(context, url)
 
-    if not _validate_bucket(context, bucket):
+    if not _validate_bucket(context, buckets):
         result = LoaderResult(successful=False,
                               error=LoaderResult.ERROR_NOT_FOUND)
         callback(result)
         return
 
-    bucket_loader = Bucket(bucket, context.config.get('TC_AWS_REGION'),
+    bucket_loader = Bucket(buckets[0], context.config.get('TC_AWS_REGION'),
                            context.config.get('TC_AWS_ENDPOINT'))
 
     handle_data = HandleDataFunc.as_func(key,
-                                         callback=callback,
-                                         bucket_loader=bucket_loader,
-                                         context=context)
+                                             callback=callback,
+                                             bucket_loader=bucket_loader,
+                                             context=context,
+                                             buckets=buckets)
 
     bucket_loader.get(key, callback=handle_data)
-
 
 class HandleDataFunc(object):
 
