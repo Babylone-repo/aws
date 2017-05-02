@@ -54,12 +54,6 @@ class Bucket(object):
             Key=self._clean_key(path),
         )
 
-        session.call(
-            callback=callback,
-            Bucket=self._bucket,
-            Key=self._clean_key(path) + '/',
-        )
-
     @return_future
     def get_url(self, path, method='GET', expiry=3600, callback=None):
         """
