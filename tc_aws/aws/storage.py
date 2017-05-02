@@ -88,13 +88,7 @@ class AwsStorage():
         :rtype: bool
         """
 
-        storage_root_path = self.context.config.get('TC_AWS_STORAGE_ROOT_PATH') if not None else ""
-
-        logger.debug("Removing (normalize path): {0}".format(self._normalize_path(path)))
-
-        path = storage_root_path + "/" + path
-
-        self.storage.delete(path)
+        self.storage.delete(self._normalize_path(path))
         return
 
     @return_future
