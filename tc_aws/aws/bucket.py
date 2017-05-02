@@ -49,7 +49,7 @@ class Bucket(object):
             logger.debug("result: {data}".format(data=data))
 
         session.call(
-            callback=callback,
+            callback=inner_callback,
             Bucket=self._bucket,
             Key=self._clean_key(path),
         )
