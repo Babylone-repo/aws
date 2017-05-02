@@ -42,6 +42,7 @@ class Bucket(object):
         session = Botocore(service='s3', region_name=self._region,
                            operation='GetObject', session=my_session,
                            endpoint_url=self._endpoint)
+        logger.debug('Get Here: {path}'.format(path=path))
         session.call(
             callback=callback,
             Bucket=self._bucket,
