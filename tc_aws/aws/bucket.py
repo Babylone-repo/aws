@@ -47,6 +47,10 @@ class Bucket(object):
 
         def inner_callback(data):
             logger.debug("result: {data}".format(data=data))
+            if data['ResponseMetadata']['HTTPStatusCode'] == 404:
+                logger.debug("Catch 404")
+            else:
+                callback(data)
 
         session.call(
             callback=inner_callback,
