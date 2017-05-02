@@ -52,7 +52,7 @@ class Bucket(object):
                 session.call(
                     callback=callback,
                     Bucket=self._bucket,
-                    Key=self._clean_key(path) + '/',
+                    Key=self._clean_key(path) + '/webp',
                 )
             else:
                 callback(data)
@@ -135,7 +135,7 @@ class Bucket(object):
         session.call(
             callback=None,
             Bucket=self._bucket,
-            Key=self._clean_key(path) + "/",
+            Key=self._clean_key(path) + "/webp",
         )
         session.call(
             callback=callback,
