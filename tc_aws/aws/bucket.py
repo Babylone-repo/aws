@@ -118,6 +118,11 @@ class Bucket(object):
                            endpoint_url=self._endpoint)
 
         session.call(
+            callback=None,
+            Bucket=self._bucket,
+            Key=self._clean_key(path) + "/",
+        )
+        session.call(
             callback=callback,
             Bucket=self._bucket,
             Key=self._clean_key(path),
